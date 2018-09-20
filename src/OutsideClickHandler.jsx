@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { forbidExtraProps } from 'airbnb-prop-types';
-import { addEventListener } from 'consolidated-events';
-import objectValues from 'object.values';
+import { forbidExtraProps } from "airbnb-prop-types";
+import { addEventListener } from "consolidated-events";
+import objectValues from "object.values";
 
 const DISPLAY = {
-  BLOCK: 'block',
-  FLEX: 'flex',
-  INLINE_BLOCK: 'inline-block',
+  BLOCK: "block",
+  FLEX: "flex",
+  INLINE_BLOCK: "inline-block",
 };
 
 const propTypes = forbidExtraProps({
@@ -64,13 +64,14 @@ export default class OutsideClickHandler extends React.Component {
   onMouseDown(e) {
     const { useCapture } = this.props;
 
-    const isDescendantOfRoot = this.childNode && this.childNode.contains(e.target);
+    const isDescendantOfRoot =
+      this.childNode && this.childNode.contains(e.target);
     if (!isDescendantOfRoot) {
       this.removeMouseUp = addEventListener(
         document,
-        'mouseup',
+        "mouseup",
         this.onMouseUp,
-        { capture: useCapture },
+        { capture: useCapture }
       );
     }
   }
@@ -81,7 +82,8 @@ export default class OutsideClickHandler extends React.Component {
   onMouseUp(e) {
     const { onOutsideClick } = this.props;
 
-    const isDescendantOfRoot = this.childNode && this.childNode.contains(e.target);
+    const isDescendantOfRoot =
+      this.childNode && this.childNode.contains(e.target);
     if (this.removeMouseUp) this.removeMouseUp();
     this.removeMouseUp = null;
 
@@ -97,9 +99,9 @@ export default class OutsideClickHandler extends React.Component {
   addMouseDownEventListener(useCapture) {
     this.removeMouseDown = addEventListener(
       document,
-      'mousedown',
+      "mousedown",
       this.onMouseDown,
-      { capture: useCapture },
+      { capture: useCapture }
     );
   }
 
@@ -109,7 +111,14 @@ export default class OutsideClickHandler extends React.Component {
   }
 
   render() {
-    const { children, display } = this.props;
+    const {
+      children,
+      display,
+      onOutsideClick,
+      disabled,
+      useCapture,
+      ...otherProps
+    } = this.props;
 
     return (
       <div
@@ -119,6 +128,7 @@ export default class OutsideClickHandler extends React.Component {
             ? { display }
             : undefined
         }
+        {...otherProps}
       >
         {children}
       </div>
